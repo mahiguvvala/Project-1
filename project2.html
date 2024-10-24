@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Login Form</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        .background {
+            position: absolute;
+            background-image: url('https://www.bing.com/th/id/OGC.238d1af8414b9311d3eacc2c1dd53f0e?pid=1.7&rurl=https%3a%2f%2fart.pixilart.com%2f1f9b037cb7caa4d.gif&ehk=ULoc%2b1PvLTPKNPDpdCo%2bR0e22z3vjh0SciwKPuN5Rwk%3d');
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            animation: animate 5s ease-in-out infinite;
+
+        }
+        @keyframes animate {
+         0% {
+          background-position: 0% 50%;
+         }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+         background-position: 0% 50%;
+        }
+      }
+
+    
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            z-index: 1;
+            width: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin: 0 auto;
+            top: 50%;
+            left: 50%;
+            transform:  translate(-50%,-50%);
+        }
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .login-form h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+            font-size: 16px;
+        }
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            color: #aaa;
+            transform: translateY(-50%);
+            transition: all 0.3s;
+            pointer-events: none;
+            font-size: 16px;
+        }
+        .input-group input:focus {
+            border-color: #007bff;
+        }
+        .input-group input:focus + label, .input-group input:not(:placeholder-shown) + label {
+            top: 0;
+            left: 10px;
+            color: #007bff;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .extra-options {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .extra-options a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .extra-options a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="login-container">
+            <form class="login-form">
+                <h2>Login</h2>
+                <div class="input-group">
+                    <input type="text" id="username" required>
+                    <label for="username">Username</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" required>
+                    <label for="password">Password</label>
+                </div>
+                <button type="submit">Login</button>
+                <div class="extra-options">
+                    <a href="#">Forgot Password?</a>
+                    <a href="#">Sign Up</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
