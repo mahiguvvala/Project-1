@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>College Time Table Management</title>
   <style>
-    
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -14,7 +13,6 @@
       display: flex;
     }
 
-     
     .sidebar {
       width: 250px;
       background-color: #00FFFF;
@@ -43,14 +41,12 @@
       background-color: #ffc0cb;
     }
 
-    
     .content {
       margin-left: 270px;
       padding: 20px;
       width: 100%;
     }
 
- 
     .section {
       display: none;
     }
@@ -59,7 +55,6 @@
       display: block;
     }
 
-  
     table {
       width: 100%;
       border-collapse: collapse;
@@ -94,11 +89,13 @@
       padding: 8px;
       border: 1px solid #ddd;
       border-radius: 4px;
-      background-color:#00ffff;
+      background-color: #00ffff;
     }
-    #roleSelector{
-      background-color:#ffc0cb;
-    }  
+
+    #roleSelector {
+      background-color: #ffc0cb;
+    }
+
     button {
       background-color: #0000FF;
       color: #fff;
@@ -113,7 +110,6 @@
       background-color: #ff00ff;
     }
 
-     
     @media (max-width: 768px) {
       .sidebar {
         width: 200px;
@@ -188,13 +184,13 @@
       </form>
 
       <h3>Class Schedule</h3>
+      <button onclick="exportToCalendar()">Sync to Calendar</button>
       <table>
         <thead>
           <tr>
             <th>Day</th>
             <th>Subject</th>
             <th>Time</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="timeTableBody">
@@ -238,14 +234,12 @@
   </div>
 
   <script>
-    // JavaScript for Role-based Permissions
     function setRole() {
       const role = document.getElementById('roleSelector').value;
       const announcementForm = document.getElementById('announcementForm');
       const scheduleForm = document.getElementById('scheduleForm');
       const attendanceForm = document.getElementById('attendanceForm');
 
-      // Reset visibility
       announcementForm.style.display = "none";
       scheduleForm.style.display = "none";
       attendanceForm.style.display = "none";
@@ -280,13 +274,44 @@
       body.appendChild(row);
     }
 
+    function exportToCalendar() {
+      let calendarContent = "BEGIN:VCALENDAR\nVERSION:2.0\n";
+      const rows = document.querySelectorAll("#timeTableBody tr");
+
+      rows.forEach((row) => {
+        const [day, subject, time] = row.children;
+        calendarContent += `
+BEGIN:VEVENT
+SUMMARY:${subject.textContent}
+DTSTART;TZID=Asia/Kolkata:${formatDate(day.textContent, time.textContent)}
+END:VEVENT\n`;
+      });
+
+      calendarContent += "END:VCALENDAR";
+      const blob = new Blob([calendarContent], { type: "text/calendar" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "schedule.ics";
+      link.click();
+    }
+
+    function formatDate(day, time) {
+      const days = {
+        Monday: "20231204",
+        Tuesday: "20231205",
+        Wednesday: "20231206",
+        Thursday: "20231207",
+        Friday: "20231208"
+      };
+      return `${days[day]}T${time.replace(":", "")}00`;
+    }
+
     function showSection(section) {
       const sections = document.querySelectorAll(".section");
-      sections.forEach((s) => (s.classList.remove("active")));
+      sections.forEach((s) => s.classList.remove("active"));
       document.getElementById(section).classList.add("active");
     }
 
-    // Set initial role-based permissions
     setRole();
   </script>
 </body>
