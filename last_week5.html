@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Time Table Management</title>
+  <style>
+    
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #ffc0cb;
+      display: flex;
+    }
+
+     
+    .sidebar {
+      width: 250px;
+      background-color: #00FFFF;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      position: fixed;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      display: block;
+      text-align: center;
+    }
+
+    .sidebar a:hover {
+      background-color: #ffc0cb;
+    }
+
+    
+    .content {
+      margin-left: 270px;
+      padding: 20px;
+      width: 100%;
+    }
+
+ 
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+  
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      background: #fff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    table th {
+      background-color: #0000FF;
+      color: #fff;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+    }
+
+    .form-group label {
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color:#00ffff;
+    }
+    #roleSelector{
+      background-color:#ffc0cb;
+    }  
+    button {
+      background-color: #0000FF;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #ff00ff;
+    }
+
+     
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      .content {
+        margin-left: 220px;
+      }
+
+      table th, table td {
+        font-size: 14px;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Menu</h2>
+    <select id="roleSelector" onchange="setRole()">
+      <option value="Admin">Admin</option>
+      <option value="Faculty">Faculty</option>
+      <option value="Student">Student</option>
+    </select>
+    <a href="#" onclick="showSection('announcements')">Announcements</a>
+    <a href="#" onclick="showSection('schedule')">Schedules</a>
+    <a href="#" onclick="showSection('attendance')">Attendance</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Announcements Section -->
+    <div id="announcements" class="section active">
+      <h1>Announcements</h1>
+      <div id="announcementForm" class="form-group" style="display: none;">
+        <label for="announcementInput">Post an Announcement</label>
+        <textarea id="announcementInput" placeholder="Write your announcement here..."></textarea>
+        <button onclick="postAnnouncement()">Post</button>
+      </div>
+      <h3>Recent Announcements</h3>
+      <div id="announcementList">No announcements yet.</div>
+    </div>
+
+    <!-- Schedule Section -->
+    <div id="schedule" class="section">
+      <h1>Schedules</h1>
+      <form id="scheduleForm" style="display: none;">
+        <div class="form-group">
+          <label for="day">Day</label>
+          <select id="day" required>
+            <option value="">Select Day</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" placeholder="Enter Subject" required>
+        </div>
+        <div class="form-group">
+          <label for="time">Time</label>
+          <input type="time" id="time" required>
+        </div>
+        <button type="submit">Add Schedule</button>
+      </form>
+
+      <h3>Class Schedule</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Subject</th>
+            <th>Time</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="timeTableBody">
+          <!-- Rows dynamically added here -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Attendance Section -->
+    <div id="attendance" class="section">
+      <h1>Attendance</h1>
+      <div id="attendanceForm" style="display: none;">
+        <form>
+          <div class="form-group">
+            <label for="studentName">Student Name</label>
+            <input type="text" id="studentName" placeholder="Enter Student Name">
+          </div>
+          <div class="form-group">
+            <label for="attendanceStatus">Attendance Status</label>
+            <select id="attendanceStatus">
+              <option value="Present">Present</option>
+              <option value="Absent">Absent</option>
+            </select>
+          </div>
+          <button type="button" onclick="addAttendance()">Add Attendance</button>
+        </form>
+      </div>
+      <h3>Attendance Records</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="attendanceBody">
+          <!-- Attendance data -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // JavaScript for Role-based Permissions
+    function setRole() {
+      const role = document.getElementById('roleSelector').value;
+      const announcementForm = document.getElementById('announcementForm');
+      const scheduleForm = document.getElementById('scheduleForm');
+      const attendanceForm = document.getElementById('attendanceForm');
+
+      // Reset visibility
+      announcementForm.style.display = "none";
+      scheduleForm.style.display = "none";
+      attendanceForm.style.display = "none";
+
+      if (role === "Admin") {
+        announcementForm.style.display = "block";
+        scheduleForm.style.display = "block";
+        attendanceForm.style.display = "block";
+      } else if (role === "Faculty") {
+        scheduleForm.style.display = "block";
+        attendanceForm.style.display = "block";
+      }
+    }
+
+    function postAnnouncement() {
+      const input = document.getElementById('announcementInput');
+      const list = document.getElementById('announcementList');
+      if (list.textContent === "No announcements yet.") list.innerHTML = "";
+      const p = document.createElement("p");
+      p.textContent = input.value;
+      list.appendChild(p);
+      input.value = "";
+    }
+
+    function addAttendance() {
+      const name = document.getElementById("studentName").value;
+      const status = document.getElementById("attendanceStatus").value;
+      const body = document.getElementById("attendanceBody");
+
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${name}</td><td>${status}</td>`;
+      body.appendChild(row);
+    }
+
+    function showSection(section) {
+      const sections = document.querySelectorAll(".section");
+      sections.forEach((s) => (s.classList.remove("active")));
+      document.getElementById(section).classList.add("active");
+    }
+
+    // Set initial role-based permissions
+    setRole();
+  </script>
+</body>
+</html>
